@@ -1,5 +1,4 @@
-# 🚀 Cyber Run Ultra
-
+# 🚀 Cyber Run 
 <div align="center">
   <i>Um jogo infinito de corrida e exploração espacial / An infinite runner and space exploration game</i>
 </div>
