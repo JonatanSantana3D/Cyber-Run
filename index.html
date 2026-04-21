@@ -50,7 +50,7 @@ canvas{display:block;}
 @keyframes bossWarnPulse{0%,100%{opacity:1;transform:translate(-50%,-50%) scale(1);}50%{opacity:0.7;transform:translate(-50%,-50%) scale(1.15); color:#fff;}}
 #pu-timer{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);height:6px;width:160px;background:#ffffff22;border-radius:3px;display:none;}
 #pu-timer-fill{height:100%;border-radius:3px;background:#00ffcc;transition:width 0.1s linear;}
-#boss-level{position:absolute;top:14px;left:50%;transform:translateX(-50%);color:#ff6b9d;font-size:14px;font-weight:bold;text-shadow:0 0 8px #ff6b9d;display:none;}
+#boss-level{position:absolute;top:38px;left:50%;transform:translateX(-50%);color:#ff6b9d;font-size:14px;font-weight:bold;text-shadow:0 0 8px #ff6b9d;display:none;}
 
 /* ESTILOS DA LOJA */
 #shop-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 10px; pointer-events: all; }
@@ -71,7 +71,7 @@ canvas{display:block;}
 <div id="ui">
   <div id="hud-top">
     <div class="hud-block">SCORE <span id="sc">0</span></div>
-    <div class="hud-block" id="boss-hp-wrap" style="display:none">BOSS <span id="boss-hp-bar"></span></div>
+    <div class="hud-block" id="boss-hp-wrap" style="display:none; position:absolute; left:50%; transform:translateX(-50%); white-space:nowrap; text-align:center;">BOSS <span id="boss-hp-bar"></span></div>
     
     <div class="hud-block" style="pointer-events:all; display:flex; align-items:center; gap:10px;">
       <span>BEST <span id="bs">0</span> &nbsp; <span style="color:#ffd700">💰</span> <span id="hud-coins">0</span></span>
@@ -106,6 +106,7 @@ canvas{display:block;}
     <button id="btn-run" class="mode-btn">[ MODO CORRIDA ]</button>
     <button id="btn-space" class="mode-btn space">[ MODO ESPAÇO ]</button>
     <button id="btn-race" class="mode-btn race">[ MODO ENDURO ]</button>
+    <button id="btn-flappy" class="mode-btn" style="border-color:#00ff66; color:#00ff66;">[ MODO FLAPPY BIRD ]</button>
   </div>
 
   <div id="shop-wrap">
@@ -118,7 +119,8 @@ canvas{display:block;}
     🏃‍♂️ CORRIDA: Saltar / Duplo Salto<br>
     🚀 ESPAÇO: Teclas [A] e [D] (ou deslizar) para os lados<br>
     🏎️ ENDURO: Teclas [A] e [D] (Carro Retro-3D)<br>
-    🛡️ Escudo &nbsp;·&nbsp; ⏳ Slow-Mo &nbsp;·&nbsp; 🧲 Ímã<br>
+    🚀 FLAPPY BIRD: Desvie dos meteoros no espaço!<br>
+    �️ Escudo  ·  ⏳ Slow-Mo  ·  🧲 Ímã<br>
     ⚡ Chefão a cada 1000 pontos!
   </div>
 </div>
@@ -143,13 +145,7 @@ const MELODIES = {
     [392.0, 0.1, 120, 'square'], [493.8, 0.1, 120, 'square'], [587.3, 0.1, 120, 'square'], [493.8, 0.1, 120, 'square'],
     [392.0, 0.1, 120, 'square'], [493.8, 0.1, 120, 'square'], [587.3, 0.1, 120, 'square'], [493.8, 0.1, 120, 'square'],
     [523.2, 0.1, 120, 'square'], [392.0, 0.1, 120, 'square'], [329.6, 0.1, 120, 'square'], [261.6, 0.1, 120, 'square'],
-    [261.6, 0.2, 240, 'square'], [0, 0, 240, 'square'],
-    [440.0, 0.1, 120, 'square'], [523.2, 0.1, 120, 'square'], [659.3, 0.1, 120, 'square'], [523.2, 0.1, 120, 'square'],
-    [440.0, 0.1, 120, 'square'], [523.2, 0.1, 120, 'square'], [659.3, 0.1, 120, 'square'], [523.2, 0.1, 120, 'square'],
-    [349.2, 0.1, 120, 'square'], [440.0, 0.1, 120, 'square'], [523.2, 0.1, 120, 'square'], [440.0, 0.1, 120, 'square'],
-    [392.0, 0.1, 120, 'square'], [493.8, 0.1, 120, 'square'], [587.3, 0.1, 120, 'square'], [493.8, 0.1, 120, 'square'],
-    [523.2, 0.1, 120, 'square'], [392.0, 0.1, 120, 'square'], [329.6, 0.1, 120, 'square'], [261.6, 0.1, 120, 'square'],
-    [0, 0, 240, 'square']
+    [261.6, 0.2, 240, 'square'], [0, 0, 240, 'square']
   ],
   space: [
     [261.6, 0.2, 250, 'sine'], [392.0, 0.2, 250, 'sine'],
@@ -158,19 +154,17 @@ const MELODIES = {
     [349.2, 0.1, 125, 'sine'], [329.6, 0.1, 125, 'sine'], [293.6, 0.1, 125, 'sine'],
     [523.2, 0.4, 400, 'sine'], [392.0, 0.2, 250, 'sine'],
     [349.2, 0.1, 125, 'sine'], [329.6, 0.1, 125, 'sine'], [349.2, 0.1, 125, 'sine'],
-    [293.6, 0.4, 500, 'sine'],
-    [392.0, 0.1, 150, 'sine'], [392.0, 0.1, 150, 'sine'], [392.0, 0.1, 150, 'sine'],
-    [440.0, 0.4, 400, 'sine'], [329.6, 0.4, 400, 'sine'],
-    [349.2, 0.1, 125, 'sine'], [329.6, 0.1, 125, 'sine'], [293.6, 0.1, 125, 'sine'],
-    [523.2, 0.4, 400, 'sine'], [392.0, 0.2, 250, 'sine'],
-    [349.2, 0.1, 125, 'sine'], [329.6, 0.1, 125, 'sine'], [349.2, 0.1, 125, 'sine'],
-    [261.6, 0.6, 800, 'sine']
+    [293.6, 0.4, 500, 'sine'], [261.6, 0.6, 800, 'sine']
   ],
   race: [
     [220, 0.1, 120, 'sawtooth'], [220, 0.1, 120, 'sawtooth'], [440, 0.2, 240, 'sawtooth'],
     [220, 0.1, 120, 'sawtooth'], [329.6, 0.1, 120, 'sawtooth'], [392, 0.2, 240, 'sawtooth'],
     [220, 0.1, 120, 'sawtooth'], [220, 0.1, 120, 'sawtooth'], [440, 0.2, 240, 'sawtooth'],
     [392, 0.1, 120, 'sawtooth'], [329.6, 0.1, 120, 'sawtooth'], [261.6, 0.2, 240, 'sawtooth']
+  ],
+  flappy: [
+    [196, 0.1, 150, 'square'], [196, 0.1, 150, 'square'], [261.6, 0.2, 300, 'square'],
+    [329.6, 0.15, 200, 'square'], [261.6, 0.15, 200, 'square'], [196, 0.2, 300, 'square']
   ]
 };
 
@@ -183,7 +177,6 @@ function playBGM() {
     if (note[0] > 0) {
         const bgmVol = parseFloat(document.getElementById('bgm-vol').value);
         if(bgmVol > 0) {
-            // A música de fundo usa a própria função, sem afetar o SFX multiplier
             try{const a=getAC(),o=a.createOscillator(),g=a.createGain();
             o.type=note[3];o.frequency.value=note[0];o.detune.value=0;
             g.gain.setValueAtTime(bgmVol,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+note[1]);
@@ -233,7 +226,7 @@ const GROUND=()=>H*0.75;
 let keys = {};
 window.addEventListener('keydown', e => { 
   keys[e.code] = true; 
-  if((e.code==='Space'||e.code==='ArrowUp') && state==='playing' && gameMode==='run'){
+  if((e.code==='Space'||e.code==='ArrowUp') && state==='playing' && (gameMode==='run' || gameMode==='flappy')){
     e.preventDefault(); player.jump();
   }
 });
@@ -242,7 +235,7 @@ window.addEventListener('keyup', e => keys[e.code] = false);
 let touchX = null;
 canvas.addEventListener('touchstart', e => {
   touchX = e.touches[0].clientX;
-  if(state === 'playing' && gameMode === 'run') player.jump();
+  if(state === 'playing' && (gameMode === 'run' || gameMode === 'flappy')) player.jump();
 });
 canvas.addEventListener('touchmove', e => {
   if (state === 'playing' && (gameMode === 'space' || gameMode === 'race') && touchX !== null) {
@@ -386,16 +379,15 @@ function triggerPopUI() {
 // ─── FUNÇÃO DE PERSPETIVA DA PISTA (Modo Race/Enduro) ────────────────────────
 function getTrackAtY(y) {
     let horizon = H * 0.45;
-    let curve = Math.sin(frameCount * 0.005) * W * 0.4; // O horizonte vai para a esquerda/direita
-    let topW = W * 0.025; // Largura da pista no horizonte
-    let botW = W * 0.52;  // Largura da pista na base (Fica fixa no centro da tela!)
+    let curve = Math.sin(frameCount * 0.005) * W * 0.4; 
+    let topW = W * 0.025; 
+    let botW = W * 0.52;  
     
     if (y < horizon) y = horizon;
     if (y > H) y = H;
     
-    let t = (y - horizon) / (H - horizon); // de 0 (horizonte) a 1 (base)
+    let t = (y - horizon) / (H - horizon); 
     
-    // O centro da pista na base (t=1) é sempre W/2. O topo (t=0) é W/2 + curve.
     let cX = (W/2 + curve) * (1 - t) + (W/2) * t; 
     let hW = topW * (1 - t) + botW * t;
     
@@ -414,16 +406,23 @@ const player={
       this.w = 34; this.h = 46;
       this.x = W/2 - this.w/2; 
       this.y = H - this.h - 40; 
+    } else if (gameMode === 'flappy') {
+      this.w = 34; this.h = 46;
+      this.x = 80; 
+      this.y = H/2 - this.h/2;
     } else {
-      // Carro maior no Enduro
-      this.w = 70; this.h = 45;
+      // Carro GIGANTE no Enduro
+      this.w = 120; this.h = 75;
       this.x = W/2 - this.w/2;
       this.y = H - this.h - 20;
     }
     this.vy=0; this.jumps=0; this.trail=[];
   },
   jump(){
-    if(gameMode === 'run' && this.jumps < this.maxJumps){
+    if(gameMode === 'flappy') { 
+      sfxJump(); this.vy = -7.5; 
+      addParticles(this.x + this.w/2, this.y + this.h, '#ff6600', 6, true); // Efeito de foginho
+    } else if(gameMode === 'run' && this.jumps < this.maxJumps){
       if(this.jumps===0)sfxJump();else sfxDoubleJump();
       this.vy=-16;this.jumps++;
     }
@@ -434,12 +433,22 @@ const player={
       this.vy+=grav;this.y+=this.vy*(slowTimer>0?0.55:1);
       const g=GROUND()-this.h;
       if(this.y>=g){this.y=g;this.vy=0;this.jumps=0;}
+    } else if (gameMode === 'flappy') {
+      const grav=slowTimer>0?0.2:0.4;
+      this.vy+=grav; this.y+=this.vy*(slowTimer>0?0.6:1);
+      if(this.y < 0) { this.y = 0; this.vy = 0; }
+      if(this.y > H - this.h) { 
+        this.y = H - this.h; this.vy = 0; 
+        if(invincible <= 0 && state === 'playing') { // Perde vida ao tocar no chão
+          lives--; sfxHit(); invincible = 80; 
+          if(lives <= 0) showGameOver(); else { this.y = H/2 - this.h/2; this.vy = 0; }
+        }
+      } 
     } else { 
       let spd = slowTimer > 0 ? 4 : 8;
       if (keys['KeyA'] || keys['ArrowLeft']) this.x -= spd;
       if (keys['KeyD'] || keys['ArrowRight']) this.x += spd;
       
-      // Força Centrífuga (Subtil) quando a pista curva
       if (gameMode === 'race' && state === 'playing') {
           let curveForce = Math.sin(frameCount * 0.005);
           this.x -= curveForce * speed * 0.15; 
@@ -456,44 +465,41 @@ const player={
   draw(){
     const skinCol = currentSkin; 
     
-    for(let i=0;i<this.trail.length;i++){
-      const a=(1-i/this.trail.length)*0.25;
-      ctx.save();ctx.globalAlpha=a;
-      ctx.fillStyle=shieldTimer>0?'#4488ff':skinCol;
-      const s=(1-i/this.trail.length)*this.w*0.45;
-      ctx.fillRect(this.trail[i].x-s/2,this.trail[i].y-s/2,s,s);
-      ctx.restore();
+    // Apenas desenha o rastro se NÃO for o modo Enduro
+    if (gameMode !== 'race') {
+      for(let i=0;i<this.trail.length;i++){
+        const a=(1-i/this.trail.length)*0.25;
+        ctx.save();ctx.globalAlpha=a;
+        ctx.fillStyle=shieldTimer>0?'#4488ff':skinCol;
+        const s=(1-i/this.trail.length)*this.w*0.45;
+        ctx.fillRect(this.trail[i].x-s/2,this.trail[i].y-s/2,s,s);
+        ctx.restore();
+      }
     }
     
     const flash=invincible>0&&Math.floor(invincible/4)%2===0;
     if(!flash){
       if (gameMode === 'race') {
-        // Carro Visto de Trás (Ultrapassagem) com as novas proporções
+        // Carro do Player agora segue o mesmo padrão visual do Inimigo para ficar padronizado
         ctx.fillStyle = '#1a0a3a'; ctx.fillRect(this.x, this.y, this.w, this.h);
         ctx.strokeStyle = shieldTimer>0?'#4488ff':skinCol; ctx.lineWidth = 2;
-        ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 6;
+        ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 8;
         ctx.strokeRect(this.x, this.y, this.w, this.h); ctx.shadowBlur = 0;
         
-        ctx.fillStyle = '#111'; // Rodas
-        ctx.fillRect(this.x-6, this.y+5, 6, 12); ctx.fillRect(this.x+this.w, this.y+5, 6, 12);
-        ctx.fillRect(this.x-6, this.y+this.h-15, 6, 12); ctx.fillRect(this.x+this.w, this.y+this.h-15, 6, 12);
+        ctx.fillStyle = skinCol; // Pára-brisas traseiro (estilo inimigo)
+        ctx.fillRect(this.x + this.w*0.15, this.y + this.h*0.15, this.w*0.7, this.h*0.4);
         
-        ctx.fillStyle = skinCol; // Pára-brisas traseiro
-        ctx.fillRect(this.x+8, this.y+10, this.w-16, 12);
-        
-        // Farolins vermelhos
-        ctx.fillStyle = '#ff2244';
-        ctx.shadowColor = '#ff2244'; ctx.shadowBlur = 10;
-        ctx.fillRect(this.x+4, this.y+this.h-8, 12, 6);
-        ctx.fillRect(this.x+this.w-16, this.y+this.h-8, 12, 6);
+        ctx.fillStyle = '#ff2244'; ctx.shadowColor = '#ff2244'; ctx.shadowBlur = 5; // Farolins (estilo inimigo)
+        ctx.fillRect(this.x + this.w*0.1, this.y + this.h*0.7, this.w*0.2, this.h*0.15);
+        ctx.fillRect(this.x + this.w*0.7, this.y + this.h*0.7, this.w*0.2, this.h*0.15);
         ctx.shadowBlur = 0;
         
-        if(bossActive && boss){
+        if(bossActive && boss){ // Canhão para o Boss
           ctx.fillStyle = skinCol;
-          ctx.fillRect(this.x+this.w/2-3, this.y-5, 6, 15);
+          ctx.fillRect(this.x + this.w/2-3, this.y-5, 6, 15);
         }
       } else {
-        // Run ou Space padrão
+        // Run, Space, Flappy padrão
         ctx.fillStyle='#1a0a3a';ctx.fillRect(this.x,this.y,this.w,this.h);
         ctx.strokeStyle=shieldTimer>0?'#4488ff':skinCol;ctx.lineWidth=2;
         ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=6;ctx.strokeRect(this.x,this.y,this.w,this.h);ctx.shadowBlur=0;
@@ -503,7 +509,7 @@ const player={
         
         if(bossActive && boss){
           ctx.fillStyle=skinCol; 
-          if(gameMode === 'run') { ctx.fillRect(this.x+this.w-5, this.y+20, 15, 6); } 
+          if(gameMode === 'run' || gameMode === 'flappy') { ctx.fillRect(this.x+this.w-5, this.y+20, 15, 6); } 
           else { ctx.fillRect(this.x+this.w/2-3, this.y-5, 6, 15); }
         }
 
@@ -512,7 +518,7 @@ const player={
         ctx.fillRect(this.x+4,this.y+this.h-8,10,8+lg);
         ctx.fillRect(this.x+this.w-14,this.y+this.h-8,10,8-lg);
 
-        if (gameMode === 'space') {
+        if (gameMode === 'space' || gameMode === 'flappy') {
           ctx.fillStyle = '#ff8800'; ctx.beginPath();
           ctx.moveTo(this.x + 6, this.y + this.h); ctx.lineTo(this.x + this.w - 6, this.y + this.h);
           ctx.lineTo(this.x + this.w/2, this.y + this.h + 12 + Math.random()*15); ctx.fill();
@@ -553,6 +559,8 @@ function spawnBoss(){
   let bx, by, bw=90, bh=110, trP=0;
   if(gameMode === 'run'){
     bx = W+80; by = GROUND()-110;
+  } else if (gameMode === 'flappy') {
+    bx = W+80; by = H/2 - 55;
   } else if (gameMode === 'space') {
     bx = W/2 - 45; by = -150;
   } else if (gameMode === 'race') {
@@ -578,9 +586,13 @@ function updateBoss(){
   boss.ang+=0.03; boss.patternTimer++; boss.shootTimer--;
   const sp=slowTimer>0?0.45:1;
   
-  if (gameMode === 'run') {
+  if (gameMode === 'run' || gameMode === 'flappy') {
     if(boss.x > W - 130) boss.x -= 2 * sp;
-    else { boss.x = W - 130; boss.y = (GROUND() - boss.h - 40) + Math.sin(boss.patternTimer * 0.05) * 40; }
+    else { 
+        boss.x = W - 130; 
+        if (gameMode === 'run') boss.y = (GROUND() - boss.h - 40) + Math.sin(boss.patternTimer * 0.05) * 40; 
+        else boss.y = (H/2 - boss.h/2) + Math.sin(boss.patternTimer * 0.02) * (H/3); 
+    }
   } else if (gameMode === 'space') {
     if(boss.y < 50) boss.y += 2 * sp;
     else { boss.y = 50; boss.x = (W/2 - boss.w/2) + Math.sin(boss.patternTimer * 0.012) * (W/3); }
@@ -591,7 +603,7 @@ function updateBoss(){
     boss.x = tr.c + (boss.trackPos * tr.w) - (boss.w/2);
   }
 
-  if(boss.shootTimer<=0 && ((gameMode==='run'&&boss.x<=W-100) || ((gameMode==='space'||gameMode==='race')&&boss.y>= (gameMode==='race'?H*0.4:50)))){
+  if(boss.shootTimer<=0 && ((gameMode==='run'||gameMode==='flappy')&&boss.x<=W-100 || ((gameMode==='space'||gameMode==='race')&&boss.y>= (gameMode==='race'?H*0.4:50)))){
     const ang=Math.atan2(player.y+player.h/2-(boss.y+boss.h/2),player.x+player.w/2-(boss.x+boss.w/2));
     boss.bullets.push({x:boss.x+boss.w/2, y:boss.y+boss.h/2, vx:Math.cos(ang)*5, vy:Math.sin(ang)*5, r:7});
     boss.shootTimer=Math.max(40, 80 - bossLevel*3);
@@ -698,6 +710,7 @@ function spawnObstacle(){
     }
   } else if (gameMode === 'space') {
     let r = 15 + Math.random() * 25;
+    if (Math.random() > 0.85) r = 60 + Math.random() * 30; // 15% de chance de um meteoro gigante aparecer
     obstacles.push({
       x: Math.random() * (W - r*2), y: -50, w: r*2, h: r*2, r: r,
       color: Math.random()>0.5?'#ff3344':'#ff8800', isMeteor: true, ang: 0, rotSpd: (Math.random()-0.5)*0.1
@@ -706,19 +719,26 @@ function spawnObstacle(){
     let horizon = H * 0.45;
     obstacles.push({
       y: horizon, w: 0, h: 0, 
-      baseW: 80, baseH: 50, // Carros Inimigos maiores!
+      baseW: 130, baseH: 80, // Carros Inimigos GIGANTES!
       color: Math.random()>0.5?'#ff3344':'#ffaa00', isCar: true, 
       trackPos: (Math.random()-0.5)*1.4 // Evita as margens extremas
+    });
+  } else if (gameMode === 'flappy') {
+    let r = 25 + Math.random() * 35; // Meteoros de tamanhos variados
+    if (Math.random() > 0.85) r = 80 + Math.random() * 40; // 15% de chance de vir um meteoro GIGANTE
+    obstacles.push({
+      x: W + 50, y: Math.random() * (H - r*2), w: r*2, h: r*2, r: r,
+      color: Math.random() > 0.5 ? '#00ffcc' : '#ff8800', isMeteor: true, ang: 0, rotSpd: (Math.random()-0.5)*0.1
     });
   }
 }
 
 let coins=[],nextCoin=50;
 function spawnCoin(forced){
-  if(gameMode === 'run'){
-    coins.push({x:forced?player.x+300+Math.random()*100:W+20,y:GROUND()-70-Math.random()*80,r:8,pulse:Math.random()*Math.PI*2});
+  if(gameMode === 'run' || gameMode === 'flappy'){
+    coins.push({x:forced?player.x+300+Math.random()*100:W+20,y: gameMode==='flappy' ? (H/4 + Math.random()*H/2) : GROUND()-70-Math.random()*80,r:8,pulse:Math.random()*Math.PI*2});
   } else if (gameMode === 'race') {
-    coins.push({y: H*0.45, r: 8, pulse:Math.random()*Math.PI*2, trackPos: (Math.random()-0.5)*1.6});
+    coins.push({y: H*0.45, r: 18, pulse:Math.random()*Math.PI*2, trackPos: (Math.random()-0.5)*1.6});
   } else {
     coins.push({x:Math.random()*(W-40)+20, y:-30, r:8, pulse:Math.random()*Math.PI*2});
   }
@@ -728,10 +748,10 @@ let powerups=[],nextPU=200;
 const PU_TYPES=[{type:'shield',emoji:'🛡️',color:'#4488ff'},{type:'slow',emoji:'⏳',color:'#ff88ff'},{type:'magnet',emoji:'🧲',color:'#ffd700'}];
 function spawnPU(){
   const t=PU_TYPES[Math.floor(Math.random()*PU_TYPES.length)];
-  if(gameMode === 'run'){
-    powerups.push({x:W+20,y:GROUND()-80-Math.random()*60,r:16,type:t.type,emoji:t.emoji,color:t.color,ang:0});
+  if(gameMode === 'run' || gameMode === 'flappy'){
+    powerups.push({x:W+20,y: gameMode==='flappy' ? (H/4 + Math.random()*H/2) : GROUND()-80-Math.random()*60,r:16,type:t.type,emoji:t.emoji,color:t.color,ang:0});
   } else if (gameMode === 'race') {
-    powerups.push({y:H*0.45, r:16, type:t.type, emoji:t.emoji, color:t.color, ang:0, trackPos: (Math.random()-0.5)*1.6});
+    powerups.push({y:H*0.45, r:28, type:t.type, emoji:t.emoji, color:t.color, ang:0, trackPos: (Math.random()-0.5)*1.6});
   } else {
     powerups.push({x:Math.random()*(W-40)+20,y:-40,r:16,type:t.type,emoji:t.emoji,color:t.color,ang:0});
   }
@@ -775,47 +795,46 @@ function drawBg(){
     ctx.globalAlpha = 1;
 
     // Sol Cyber Maior
-  // 🌅 SOL CYBER REDONDO (MAIOR E COM GLOW)
-let sunX = W/2 + curve * 0.1;
-let sunY = horizon - 40;
-let sunR = 180; // tamanho maior
+    let sunX = W/2 + curve * 0.1;
+    let sunY = horizon - 40;
+    let sunR = 180; // tamanho maior
 
-// Glow externo
-let grad = ctx.createRadialGradient(sunX, sunY, sunR * 0.2, sunX, sunY, sunR * 1.4);
-grad.addColorStop(0, th.line);
-grad.addColorStop(0.4, th.line + 'aa');
-grad.addColorStop(1, 'transparent');
+    // Glow externo
+    let grad = ctx.createRadialGradient(sunX, sunY, sunR * 0.2, sunX, sunY, sunR * 1.4);
+    grad.addColorStop(0, th.line);
+    grad.addColorStop(0.4, th.line + 'aa');
+    grad.addColorStop(1, 'transparent');
 
-ctx.fillStyle = grad;
-ctx.beginPath();
-ctx.arc(sunX, sunY, sunR * 1.4, 0, Math.PI * 2);
-ctx.fill();
-
-// Corpo do sol (redondo)
-ctx.fillStyle = th.line;
-ctx.shadowColor = th.line;
-ctx.shadowBlur = 60;
-
-ctx.beginPath();
-ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
-ctx.fill();
-
-ctx.shadowBlur = 0;
-
-// Linhas internas estilo synthwave (sem quebrar o formato)
-ctx.strokeStyle = th.bg;
-ctx.lineWidth = 2;
-ctx.globalAlpha = 0.6;
-
-for (let i = 0; i < 10; i++) {
-    let y = sunY + (i * 8);
+    ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.moveTo(sunX - sunR, y);
-    ctx.lineTo(sunX + sunR, y);
-    ctx.stroke();
-}
+    ctx.arc(sunX, sunY, sunR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
 
-ctx.globalAlpha = 1;
+    // Corpo do sol (redondo)
+    ctx.fillStyle = th.line;
+    ctx.shadowColor = th.line;
+    ctx.shadowBlur = 60;
+
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+
+    // Linhas internas estilo synthwave (sem quebrar o formato)
+    ctx.strokeStyle = th.bg;
+    ctx.lineWidth = 2;
+    ctx.globalAlpha = 0.6;
+
+    for (let i = 0; i < 10; i++) {
+        let y = sunY + (i * 8);
+        ctx.beginPath();
+        ctx.moveTo(sunX - sunR, y);
+        ctx.lineTo(sunX + sunR, y);
+        ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
 
     // Terreno Base
     ctx.fillStyle = th.floor; ctx.fillRect(0, horizon, W, H-horizon);
@@ -880,7 +899,7 @@ ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
     
   } else {
-    // BG NORMAL (Run e Space)
+    // BG NORMAL (Run, Space e Flappy)
     ctx.fillStyle=th.bg;ctx.fillRect(0,0,W,H);
     if(slowTimer>0){ctx.fillStyle='rgba(60,0,100,0.15)';ctx.fillRect(0,0,W,H);}
     for(const s of stars){
@@ -890,7 +909,7 @@ ctx.globalAlpha = 1;
       ctx.fillRect(s.x*W,s.y*H,s.s,s.s);
       if (state === 'playing') {
         const sp = slowTimer>0 ? 0.2 : 0.5;
-        if (gameMode === 'run') {
+        if (gameMode === 'run' || gameMode === 'flappy') {
           s.x -= speed * 0.0005 * sp; if(s.x < 0) s.x = 1;
         } else {
           s.y += speed * 0.0015 * sp * s.s; if(s.y > 1) { s.y = 0; s.x = Math.random(); }
@@ -901,11 +920,11 @@ ctx.globalAlpha = 1;
     if (gameMode === 'run') {
       for(const b of buildings){
         ctx.fillStyle=`hsl(${th.hue + b.hueOff}, 50%, ${b.l}%)`;
-        ctx.fillRect(b.x*W,H-b.h,b.w,b.h);
+        ctx.fillRect(b.x*W, H-b.h,b.w,b.h); 
         if (b.layer === 1) {
           ctx.fillStyle=th.line+'18'; 
           for(let r=0;r<Math.floor(b.h/22);r++)for(let c=0;c<Math.floor(b.w/18);c++)
-            if(Math.sin(r*7+c*13+b.x*100)>0.25)ctx.fillRect(b.x*W+4+c*18,H-b.h+4+r*22,10,12);
+            if(Math.sin(r*7+c*13+b.x*100)>0.25)ctx.fillRect(b.x*W+4+c*18, H-b.h+4+r*22,10,12);
         }
         let bSpd = (b.layer === 0) ? 0.1 : 0.3;
         b.x -= speed*(slowTimer>0 ? (bSpd/2) : bSpd)/W;
@@ -915,15 +934,18 @@ ctx.globalAlpha = 1;
           b.w = (b.layer===0) ? 30+Math.random()*60 : 40+Math.random()*90;
         }
       }
-      ctx.fillStyle=th.floor;ctx.fillRect(0,GROUND(),W,H-GROUND());
-      ctx.strokeStyle=slowTimer>0?'#ff88ff':th.line;
-      ctx.lineWidth=2;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=8;
-      ctx.beginPath();ctx.moveTo(0,GROUND());ctx.lineTo(W,GROUND());ctx.stroke();ctx.shadowBlur=0;
-      for(const g of gridX){
-        ctx.strokeStyle=th.line; ctx.globalAlpha=0.06; ctx.lineWidth=1;
-        ctx.beginPath();ctx.moveTo(g.x*W,GROUND());ctx.lineTo(W/2,GROUND()+30);ctx.stroke();
-        ctx.globalAlpha=1;
-        g.x-=speed*(slowTimer>0?0.25:0.5)/W;if(g.x<0)g.x=1;
+      
+      if(gameMode === 'run') {
+        ctx.fillStyle=th.floor;ctx.fillRect(0,GROUND(),W,H-GROUND());
+        ctx.strokeStyle=slowTimer>0?'#ff88ff':th.line;
+        ctx.lineWidth=2;ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=8;
+        ctx.beginPath();ctx.moveTo(0,GROUND());ctx.lineTo(W,GROUND());ctx.stroke();ctx.shadowBlur=0;
+        for(const g of gridX){
+          ctx.strokeStyle=th.line; ctx.globalAlpha=0.06; ctx.lineWidth=1;
+          ctx.beginPath();ctx.moveTo(g.x*W,GROUND());ctx.lineTo(W/2,GROUND()+30);ctx.stroke();
+          ctx.globalAlpha=1;
+          g.x-=speed*(slowTimer>0?0.25:0.5)/W;if(g.x<0)g.x=1;
+        }
       }
     }
   }
@@ -949,6 +971,13 @@ function drawRecordGhost() {
             ctx.font = 'bold 14px monospace';
             ctx.fillText('🏆 ' + bestScore, ghostX, GROUND() - 130);
         }
+    } else if (gameMode === 'flappy') {
+        const ghostX = player.x + (diff * 2.5);
+        if (ghostX < W - 20) {
+            ctx.beginPath(); ctx.moveTo(ghostX, 0); ctx.lineTo(ghostX, H); ctx.stroke();
+            ctx.font = 'bold 14px monospace';
+            ctx.fillText('🏆 ' + bestScore, ghostX, H/2);
+        }
     } else if (gameMode === 'space') {
         const ghostY = player.y - (diff * 2);
         if (ghostY > 50) {
@@ -970,8 +999,9 @@ function drawRecordGhost() {
     ctx.setLineDash([]); ctx.restore();
 }
 
-function collides(a,bx,by,bw,bh){
-  return a.x+7<bx+bw&&a.x+a.w-7>bx&&a.y+7<by+bh&&a.y+a.h-7>by;
+function collides(a, bx, by, bw, bh, padding = 7) {
+  // Verifica colisão entre o objeto 'a' (player) e um retângulo (obstáculo/inimigo)
+  return a.x + padding < bx + bw && a.x + a.w - padding > bx && a.y + padding < by + bh && a.y + a.h - padding > by;
 }
 
 function updateHUD(){
@@ -1017,6 +1047,7 @@ function startGame(mode){
 document.getElementById('btn-run').addEventListener('click', () => startGame('run'));
 document.getElementById('btn-space').addEventListener('click', () => startGame('space'));
 document.getElementById('btn-race').addEventListener('click', () => startGame('race'));
+document.getElementById('btn-flappy').addEventListener('click', () => startGame('flappy'));
 
 document.addEventListener('pointerdown', e => {
   if(e.target.closest('#overlay') || e.target.closest('#shop-wrap') || e.target.closest('#bgm-vol') || e.target.closest('#sfx-vol')) return;
@@ -1047,9 +1078,9 @@ function loop(){
     if(bossActive && boss) updateBoss();
 
     // Player Shooting
-    if(bossActive && boss && ((gameMode==='run' && boss.x < W) || ((gameMode==='space'||gameMode==='race') && boss.y >= 0))){
+    if(bossActive && boss && (((gameMode==='run' || gameMode==='flappy') && boss.x < W) || ((gameMode==='space'||gameMode==='race') && boss.y >= 0))){
         if(frameCount % 15 === 0){
-            if (gameMode === 'run') {
+            if (gameMode === 'run' || gameMode === 'flappy') {
               playerBullets.push({x: player.x+player.w, y: player.y+22, vx: 12, vy:0, w: 14, h: 4});
             } else { 
               playerBullets.push({x: player.x+player.w/2-2, y: player.y, vx: 0, vy:-12, w: 4, h: 14});
@@ -1083,8 +1114,9 @@ function loop(){
 
     for(let i=obstacles.length-1;i>=0;i--){
       let o = obstacles[i];
-      if (gameMode === 'run') {
+      if (gameMode === 'run' || gameMode === 'flappy') {
         o.x -= speed * sp;
+        if(o.isMeteor) o.ang += o.rotSpd * sp;
         if(o.x+o.w < 0){obstacles.splice(i,1);continue;}
       } else if (gameMode === 'space') {
         o.y += speed * sp * 1.3;
@@ -1134,6 +1166,17 @@ function loop(){
         ctx.fillRect(o.x + o.w*0.1, o.y + o.h*0.7, o.w*0.2, o.h*0.15);
         ctx.fillRect(o.x + o.w*0.7, o.y + o.h*0.7, o.w*0.2, o.h*0.15);
         ctx.shadowBlur = 0;
+      } else if (o.isCaveSpike) {
+        // Espinhos do Flappy Bird
+        ctx.fillStyle = '#0a1a0f'; ctx.fillRect(o.x, o.y, o.w, o.h);
+        ctx.strokeStyle = o.color; ctx.lineWidth = 2; ctx.shadowColor = o.color; ctx.shadowBlur = 10;
+        ctx.strokeRect(o.x, o.y, o.w, o.h); ctx.shadowBlur = 0;
+        ctx.fillStyle = o.color;
+        if(o.top) {
+           ctx.beginPath(); ctx.moveTo(o.x, o.y+o.h); ctx.lineTo(o.x+o.w/2, o.y+o.h+20); ctx.lineTo(o.x+o.w, o.y+o.h); ctx.fill();
+        } else {
+           ctx.beginPath(); ctx.moveTo(o.x, o.y); ctx.lineTo(o.x+o.w/2, o.y-20); ctx.lineTo(o.x+o.w, o.y); ctx.fill();
+        }
       } else {
         ctx.shadowColor=o.color;ctx.shadowBlur=10;
         ctx.fillStyle=o.color+'22';ctx.fillRect(o.x-4,o.y-4,o.w+8,o.h+8);ctx.shadowBlur=0;
@@ -1153,13 +1196,13 @@ function loop(){
       }
       
       let scaleEffect = 1;
-      if (gameMode === 'run') { coins[i].x -= speed*sp; }
+      if (gameMode === 'run' || gameMode === 'flappy') { coins[i].x -= speed*sp; }
       else if (gameMode === 'race') {
           let tr_prev = getTrackAtY(coins[i].y);
           coins[i].y += speed * sp * (1 + tr_prev.t * 3);
           let tr = getTrackAtY(coins[i].y);
           coins[i].x = tr.c + coins[i].trackPos * tr.w;
-          scaleEffect = 0.3 + (tr.t * 0.7); // Fica maior ao descer
+          scaleEffect = 0.4 + (tr.t * 1.2); 
       }
       else { coins[i].y += speed*sp; }
       
@@ -1185,13 +1228,13 @@ function loop(){
     if(nextPU<=0){spawnPU();nextPU=180+Math.floor(Math.random()*120);}
     for(let i=powerups.length-1;i>=0;i--){
       let scaleEffect = 1;
-      if (gameMode === 'run') { powerups[i].x -= speed*sp; }
+      if (gameMode === 'run' || gameMode === 'flappy') { powerups[i].x -= speed*sp; }
       else if (gameMode === 'race') {
           let tr_prev = getTrackAtY(powerups[i].y);
           powerups[i].y += speed * sp * (1 + tr_prev.t * 3);
           let tr = getTrackAtY(powerups[i].y);
           powerups[i].x = tr.c + powerups[i].trackPos * tr.w;
-          scaleEffect = 0.3 + (tr.t * 0.7);
+          scaleEffect = 0.4 + (tr.t * 1.2);
       }
       else { powerups[i].y += speed*sp; }
       
@@ -1229,7 +1272,7 @@ function loop(){
         ctx.fillRect(-6, -1, 12, 2); ctx.restore(); p.life-=0.05;
       } else { ctx.fillRect(p.x-3,p.y-3,6,6); p.life-=0.04; }
       p.x+=p.vx*sp; p.y+=p.vy*sp; 
-      if(gameMode === 'run') p.vy+=0.2; 
+      if(gameMode === 'run' || gameMode === 'flappy') p.vy+=0.2; 
       if(p.life<=0)particles.splice(i,1);
     }
     
@@ -1264,6 +1307,7 @@ function loop(){
     }
   }else{
     if (gameMode === 'run') { player.y = GROUND()-player.h + Math.sin(frameCount*0.05)*3; player.x = 110; }
+    else if (gameMode === 'flappy') { player.y = H/2 - player.h/2 + Math.sin(frameCount*0.05)*5; player.x = 80;}
     player.draw();
     for(let i=particles.length-1;i>=0;i--){
       const p=particles[i];ctx.globalAlpha=p.life;ctx.fillStyle=p.color;ctx.fillRect(p.x-3,p.y-3,6,6);
