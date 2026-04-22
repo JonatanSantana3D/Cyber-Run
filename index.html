@@ -756,7 +756,7 @@ function spawnObstacle(){
     obstacles.push({
       y: horizon, w: 0, h: 0, 
       baseW: 110, baseH: 68, // Carros Inimigos ajustados
-      color: Math.random()>0.5?'#ff3344':'#ffaa00', isCar: true, 
+      color: Math.random()>0.5?'#ff3344':'#ff8800', isCar: true, 
       trackPos: (Math.random()-0.5)*1.4 // Evita as margens extremas
     });
   } else if (gameMode === 'flappy') {
@@ -1171,7 +1171,7 @@ function loop(){
         if(o.isCar) {
             let tr_prev = getTrackAtY(o.y);
             // Inimigos Mais Lentos na perspetiva
-            o.y += speed * sp * (0.6 + tr_prev.t * 1.5); 
+            o.y += speed * sp * (0.4 + tr_prev.t * 1.1); 
             
             let tr = getTrackAtY(o.y);
             o.w = Math.max(15, o.baseW * tr.t);
@@ -1340,7 +1340,16 @@ function loop(){
     updateHUD();
 
     if(bossActive && boss && boss.hp<=0){
-      // ... (código do boss morrendo omitido para brevidade, mantido igual)
+      sfxBossDie();
+      shockwaves.push({x: boss.x+boss.w/2, y: boss.y+boss.h/2, r: 10, maxR: 350, color: boss.color});
+      shockwaves.push({x: boss.x+boss.w/2, y: boss.y+boss.h/2, r: 1, maxR: 200, color: '#ffffff'});
+      addParticles(boss.x+boss.w/2,boss.y+boss.h/2, boss.color, 20);
+      addParticles(boss.x+boss.w/2,boss.y+boss.h/2, '#ffffff', 20, true); 
+      
+      bossActive=false; boss=null; bossHpWrap.style.display='none';
+      document.getElementById('boss-level').style.display='none'; bossWarned=false;
+      bgLevel++; nextBossScore += 1000; nextObstacle=20; 
+      for(let i=0;i<5;i++) spawnCoin(true);
     }
   } else if (state === 'dead') {
     deadTimer++;
