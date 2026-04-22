@@ -886,7 +886,7 @@ function drawBg(){
 
     // Faixas da pista e linha pontilhada
     const stripCount = 20;
-    let sp = slowTimer>0 ? 0.25 : 0.5;
+    let sp = slowTimer>0 ? 0.5 : 1.0;
     const scrollOff = (frameCount * speed * sp * 0.04) % 1;
 
     for(let i=0; i<stripCount; i++){
@@ -1171,7 +1171,7 @@ function loop(){
         if(o.isCar) {
             let tr_prev = getTrackAtY(o.y);
             // Inimigos Mais Lentos na perspetiva
-            o.y += speed * sp * (0.4 + tr_prev.t * 1.1); 
+            o.y += speed * sp * (0.3 + tr_prev.t * 0.7); 
             
             let tr = getTrackAtY(o.y);
             o.w = Math.max(15, o.baseW * tr.t);
@@ -1244,7 +1244,7 @@ function loop(){
       if (gameMode === 'run' || gameMode === 'flappy') { coins[i].x -= speed*sp; }
       else if (gameMode === 'race') {
           let tr_prev = getTrackAtY(coins[i].y);
-          coins[i].y += speed * sp * (1 + tr_prev.t * 3);
+          coins[i].y += speed * sp * (0.5 + tr_prev.t * 1.5);
           let tr = getTrackAtY(coins[i].y);
           coins[i].x = tr.c + coins[i].trackPos * tr.w;
           scaleEffect = 0.4 + (tr.t * 1.2); 
@@ -1276,7 +1276,7 @@ function loop(){
       if (gameMode === 'run' || gameMode === 'flappy') { powerups[i].x -= speed*sp; }
       else if (gameMode === 'race') {
           let tr_prev = getTrackAtY(powerups[i].y);
-          powerups[i].y += speed * sp * (1 + tr_prev.t * 3);
+          powerups[i].y += speed * sp * (0.5 + tr_prev.t * 1.5);
           let tr = getTrackAtY(powerups[i].y);
           powerups[i].x = tr.c + powerups[i].trackPos * tr.w;
           scaleEffect = 0.4 + (tr.t * 1.2);
