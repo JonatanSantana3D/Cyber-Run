@@ -234,7 +234,8 @@ window.addEventListener('keyup', e => keys[e.code] = false);
 
 // ─── Touch Controls ──────────────────────────────────────────────────────────
 let touchLeft = false, touchRight = false;
-const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+// Detecta se é um dispositivo móvel real (celular/tablet) e não um PC com touch
+const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.matchMedia("(pointer: coarse)").matches;
 
 function initTouchControls() {
   if (!isTouchDevice) return;
@@ -446,8 +447,8 @@ const player={
       this.x = 80; 
       this.y = H/2 - this.h/2;
     } else {
-      // Carro GIGANTE no Enduro
-      this.w = 120; this.h = 75;
+      // Carro ajustado no Enduro (um pouco menor)
+      this.w = 100; this.h = 62;
       this.x = W/2 - this.w/2;
       this.y = H - this.h - 20;
     }
@@ -754,7 +755,7 @@ function spawnObstacle(){
     let horizon = H * 0.45;
     obstacles.push({
       y: horizon, w: 0, h: 0, 
-      baseW: 130, baseH: 80, // Carros Inimigos GIGANTES!
+      baseW: 110, baseH: 68, // Carros Inimigos ajustados
       color: Math.random()>0.5?'#ff3344':'#ffaa00', isCar: true, 
       trackPos: (Math.random()-0.5)*1.4 // Evita as margens extremas
     });
